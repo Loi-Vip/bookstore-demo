@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="600" viewBox="0 0 400 600" role="img" aria-labelledby="title desc">
+<title id="title">Cách Sử Dụng Chất Xám — Tập 01 — bìa minh hoạ</title><desc id="desc">Tên truyện, tác giả và câu chuyện hư cấu cho cửa hàng demo. Bìa typography và hình học được tạo riêng.</desc>
+<rect width="400" height="600" fill="#c7d5e3"/>
+<defs><pattern id="dots" width="8" height="8" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".7" fill="#24324a" opacity=".13"/></pattern></defs>
+<rect width="400" height="600" fill="url(#dots)"/><rect x="22" y="22" width="356" height="556" fill="none" stroke="#24324a" opacity=".45"/>
+<path d="M22 54H378M22 498H378" stroke="#24324a" opacity=".5"/>
+<text x="37" y="43" font-family="Arial,sans-serif" font-size="8" font-weight="700" letter-spacing="2" fill="#24324a">MỰC / NHỮNG THẾ GIỚI MỚI</text>
+<text x="363" y="43" text-anchor="end" font-family="Arial,sans-serif" font-size="8" fill="#24324a">MANHWA</text>
+<text x="37" y="109" font-family="Arial,sans-serif" font-weight="900" font-size="32" letter-spacing="-1.2" fill="#24324a">CÁCH SỬ DỤNG</text>
+<text x="37" y="150" font-family="Arial,sans-serif" font-weight="900" font-size="39" letter-spacing="-1.2" fill="#24324a">CHẤT XÁM</text>
+<g transform="translate(200 325)" fill="none" stroke="#24324a" stroke-width="2"><path d="M0-67Q-48-100-100-72V81Q-48 54 0 85Q48 54 100 81V-72Q48-100 0-67Z" fill="#e0ab70" stroke="none"/><path d="M0-67V85M-81-48Q-43-63-20-47M-81-25Q-43-40-20-24M-81-2Q-43-17-20-1M20-47Q43-63 81-48M20-24Q43-40 81-25M20-1Q43-17 81-2"/><path d="M-100 101H100"/></g>
+<rect x="270" y="432" width="92" height="66" fill="#24324a"/><text x="316" y="480" text-anchor="middle" font-family="Arial,sans-serif" font-size="49" font-weight="800" letter-spacing="-3" fill="#c7d5e3">01</text>
+<text x="37" y="529" font-family="Arial,sans-serif" font-size="13" font-weight="700" fill="#24324a">Vân Khê</text>
+<text x="37" y="555" font-family="Arial,sans-serif" font-size="8" letter-spacing="1.4" fill="#24324a" opacity=".75">THẾ GIỚI HƯ CẤU / BÌA MINH HOẠ DEMO</text>
+</svg>

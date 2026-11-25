@@ -1,0 +1,12 @@
+{
+  "name": "muc-comic-store-demo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Vietnamese comic storefront frontend demo",
+  "scripts": {
+    "start": "node serve.mjs",
+    "check": "node --check catalog.js && node --check catalog-compat.js && node --check store.js && node --check app.js && node --check serve.mjs",
+    "test": "node tests/smoke.cjs"
+  },
+  "engines": { "node": ">=18" }
+}

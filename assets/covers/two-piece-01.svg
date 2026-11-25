@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="600" viewBox="0 0 400 600" role="img" aria-labelledby="title desc">
+<title id="title">Two Piece — Tập 01 — bìa minh hoạ</title><desc id="desc">Tên truyện, tác giả và câu chuyện hư cấu cho cửa hàng demo. Bìa typography và hình học được tạo riêng.</desc>
+<rect width="400" height="600" fill="#fae5ae"/>
+<defs><pattern id="dots" width="8" height="8" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".7" fill="#153e52" opacity=".13"/></pattern></defs>
+<rect width="400" height="600" fill="url(#dots)"/><rect x="22" y="22" width="356" height="556" fill="none" stroke="#153e52" opacity=".45"/>
+<path d="M22 54H378M22 498H378" stroke="#153e52" opacity=".5"/>
+<text x="37" y="43" font-family="Arial,sans-serif" font-size="8" font-weight="700" letter-spacing="2" fill="#153e52">MỰC / NHỮNG THẾ GIỚI MỚI</text>
+<text x="363" y="43" text-anchor="end" font-family="Arial,sans-serif" font-size="8" fill="#153e52">MANGA</text>
+<text x="37" y="109" font-family="Arial,sans-serif" font-weight="900" font-size="39" letter-spacing="-1.2" fill="#153e52">TWO</text>
+<text x="37" y="150" font-family="Arial,sans-serif" font-weight="900" font-size="39" letter-spacing="-1.2" fill="#153e52">PIECE</text>
+<g transform="translate(200 325)" fill="none" stroke="#153e52" stroke-width="2"><circle r="87"/><circle r="64" stroke-dasharray="2 8"/><path d="M0-112V112M-112 0H112"/><path d="M0-80 17-17 80 0 17 17 0 80-17 17-80 0-17-17Z" fill="#e76b49"/><circle r="13" fill="#153e52"/></g>
+<rect x="270" y="432" width="92" height="66" fill="#153e52"/><text x="316" y="480" text-anchor="middle" font-family="Arial,sans-serif" font-size="49" font-weight="800" letter-spacing="-3" fill="#fae5ae">01</text>
+<text x="37" y="529" font-family="Arial,sans-serif" font-size="13" font-weight="700" fill="#153e52">Lam Vũ</text>
+<text x="37" y="555" font-family="Arial,sans-serif" font-size="8" letter-spacing="1.4" fill="#153e52" opacity=".75">THẾ GIỚI HƯ CẤU / BÌA MINH HOẠ DEMO</text>
+</svg>

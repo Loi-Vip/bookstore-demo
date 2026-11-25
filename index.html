@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f6f2">
+  <meta name="description" content="Mực — cửa hàng truyện: manga, manhwa, manhua, light novel và boxset theo bộ, theo tập.">
+  <title>Mực — Cửa hàng truyện</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <script src="catalog.js" defer></script>
+  <script src="catalog-compat.js" defer></script>
+  <script src="store.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#catalog">Đến danh mục truyện</a>
+  <div class="announcement"><span>MỘT TẬP TRUYỆN. CẢ MỘT THẾ GIỚI.</span><span>Demo: miễn phí giao hàng từ 300.000đ <b>↗</b></span></div>
+  <header class="site-header">
+    <div class="header-main container">
+      <a class="brand" href="#top" aria-label="Mực — trang chủ"><span class="brand-symbol" aria-hidden="true">m<span>✳</span></span><span class="brand-name">MỰC<small>COMIC STORE</small></span></a>
+      <form class="search-box" id="searchForm" role="search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><input id="searchInput" type="search" placeholder="Tìm truyện, bộ truyện, tác giả…" aria-label="Tìm truyện, bộ truyện hoặc tác giả"><kbd>/</kbd></form>
+      <div class="header-actions">
+        <button class="icon-button" id="themeToggle" aria-label="Chuyển giao diện tối" title="Đổi sáng / tối"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.7 13.5A9 9 0 0 1 10.5 3.3 9 9 0 1 0 20.7 13.5Z"/></svg></button>
+        <button class="icon-button favorite-nav" id="wishlistButton" aria-label="Xem truyện yêu thích" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.8a5.5 5.5 0 0 0-7.8 0L12 5.9l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.4a5.5 5.5 0 0 0 0-7.8Z"/></svg><span class="action-count" id="wishlistCount">0</span></button>
+        <button class="cart-button" id="openCart" aria-label="Mở giỏ hàng"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14l1 14H4L5 7Z"/><path d="M8 8V6a4 4 0 0 1 8 0v2"/></svg><span>Giỏ hàng</span><b id="cartCount">0</b></button>
+      </div>
+    </div>
+    <nav class="nav-bar container" aria-label="Danh mục cửa hàng">
+      <div class="nav-links"><button data-nav="all" class="active">Khám phá</button><button data-nav="manga">Manga</button><button data-nav="manhwa">Manhwa</button><button data-nav="manhua">Manhua</button><button data-nav="light-novel">Light novel</button><button data-format-nav="boxset">Boxset <span>HOT</span></button></div>
+      <button class="orders-link" id="openOrders">Đơn hàng mẫu <span>↗</span></button>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero-layout container" aria-labelledby="heroTitle">
+      <div class="hero-main">
+        <div class="hero-copy"><p class="eyebrow"><i></i> DÀNH CHO NGƯỜI MÊ TRUYỆN</p><h1 id="heroTitle">Tập mới.<br>Thế giới <em>mới.</em></h1><p>Gặp lại nhân vật yêu thích.<br>Hoàn thiện bộ sưu tập của riêng bạn.</p><button class="primary-button" id="heroExplore">Khám phá truyện <span>↗</span></button><div class="hero-caption"><span>01 / THE NEXT CHAPTER</span><span>✦</span></div></div>
+        <div class="hero-art" aria-label="Bộ sưu tập truyện minh hoạ"><span class="art-orbit orbit-one"></span><span class="art-orbit orbit-two"></span><span class="hero-star">✳</span><div class="cover-fan" id="heroCovers"></div><span class="art-label">THÊM MỘT TẬP,<br>THÊM MỘT CUỘC PHIÊU LƯU.</span></div>
+      </div>
+      <button class="hero-side" id="heroBoxset"><span class="side-label">GÓC SƯU TẦM <span>↗</span></span><h2>Đủ bộ.<br> Đủ mê.</h2><p>Boxset & combo<br>cho chiếc kệ còn trống.</p><div class="boxset-art" aria-hidden="true"><span>01</span><span>02</span><span>03</span><span>04</span><span>05</span></div><span class="side-bottom">SĂN BOXSET <span>→</span></span></button>
+    </section>
+
+    <div class="benefits container" aria-label="Thông tin demo"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h11v12H3zM14 10h4l3 4v4h-7"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg>Đóng gói giữ góc truyện</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 4v6c0 5-8 8-8 8s-8-3-8-8V7l8-4Z"/><path d="m8 12 3 3 5-6"/></svg>Thông tin tập rõ ràng</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14v12H5zM3 5h18v3H3zM12 5v15M12 5c-8 0-5-7-2-3l2 3Zm0 0c8 0 5-7 2-3l-2 3Z"/></svg>Mua lẻ hoặc chọn cả bộ</span><span class="demo-pill"><i></i> CỬA HÀNG DEMO</span></div>
+
+    <section class="catalog-section container" id="catalog" aria-labelledby="catalogTitle">
+      <div class="section-heading"><div><p class="eyebrow">KỆ TRUYỆN CỦA BẠN</p><h2 id="catalogTitle">Hôm nay, đọc gì?</h2></div><p class="catalog-note">Tìm tập còn thiếu.<br>Hay bắt đầu một bộ hoàn toàn mới.</p></div>
+      <div class="category-row" aria-label="Lọc loại truyện"><button class="category active" data-category="all" aria-pressed="true">Tất cả truyện</button><button class="category" data-category="manga" aria-pressed="false">Manga</button><button class="category" data-category="manhwa" aria-pressed="false">Manhwa</button><button class="category" data-category="manhua" aria-pressed="false">Manhua</button><button class="category" data-category="light-novel" aria-pressed="false">Light novel</button><span class="category-divider"></span><button class="category" id="boxsetFilter" aria-pressed="false">Boxset / Combo <span>↗</span></button></div>
+      <div class="filter-bar"><div class="filter-left"><span id="resultCount" role="status" aria-live="polite"></span><label class="stock-check"><input type="checkbox" id="stockFilter">Chỉ còn hàng</label><button class="clear-filters" id="clearFilters" hidden>Xoá bộ lọc ×</button></div><label class="sort-label">Sắp xếp <select id="sortSelect"><option value="featured">Đề xuất</option><option value="newest">Tập mới trước</option><option value="priceAsc">Giá tăng dần</option><option value="priceDesc">Giá giảm dần</option><option value="title">Tên A–Z</option></select></label></div>
+      <div class="product-grid" id="productGrid"></div>
+      <div class="empty-state" id="emptyState" hidden><span>…</span><h3>Chiếc kệ này đang trống.</h3><p>Thử từ khoá khác hoặc bỏ bớt bộ lọc nhé.</p><button class="secondary-button" id="emptyReset">Xem tất cả truyện <span>→</span></button></div>
+      <p class="catalog-disclaimer">Tên truyện đã được tuỳ biến cho bản demo. Bìa tự thiết kế; tác giả, cốt truyện, giá và tồn kho là dữ liệu minh hoạ.</p>
+    </section>
+
+    <section class="series-section container" aria-labelledby="seriesTitle"><div class="section-heading"><div><p class="eyebrow">MỘT TẬP CHƯA BAO GIỜ LÀ ĐỦ</p><h2 id="seriesTitle">Theo dấu bộ truyện.</h2></div><span class="editor-label">MỰC PICKS <span>✳</span></span></div><div class="series-grid" id="seriesGrid"></div></section>
+    <section class="collection-banner container"><span class="banner-symbol" aria-hidden="true">✳</span><div><p class="eyebrow">MỖI CHIẾC KỆ ĐỀU CÓ MỘT CÂU CHUYỆN</p><h2>Bộ sưu tập bắt đầu<br>từ tập truyện đầu tiên.</h2></div><button class="light-button" id="browseAll">Tìm tập đầu tiên <span>↗</span></button></section>
+  </main>
+  <footer class="site-footer container"><div><a class="footer-brand" href="#top">MỰC<span>✳</span></a><p>Một góc nhỏ cho những thế giới lớn.</p></div><div class="footer-links"><button data-orders>Đơn hàng mẫu</button><button id="aboutButton">Về bản demo</button><a href="https://github.com/Mattlambo/comic-e-commerce" target="_blank" rel="noopener noreferrer">Nguồn tham khảo ↗</a><span>© 2026 Mực Comic Store</span></div></footer>
+
+  <dialog id="detailDialog" class="detail-dialog"><button class="close-button" data-close aria-label="Đóng chi tiết truyện">×</button><div id="detailContent"></div></dialog>
+  <dialog id="cartDialog" class="cart-drawer" aria-labelledby="cartTitle"><div class="drawer-head"><div><p class="eyebrow">BỘ SƯU TẬP SẮP TỚI</p><h2 id="cartTitle">Giỏ truyện <span id="drawerCount">0</span></h2></div><button class="close-button" data-close aria-label="Đóng giỏ hàng">×</button></div><div id="cartItems" class="cart-items"></div><div class="cart-empty" id="cartEmpty"><span>✳</span><h3>Chưa có tập truyện nào.</h3><p>Bắt đầu bộ sưu tập của bạn nhé.</p><button class="secondary-button" data-close>Tiếp tục khám phá →</button></div><div class="cart-footer" id="cartFooter" hidden><form id="couponForm" class="coupon-form"><label class="sr-only" for="couponInput">Mã giảm giá</label><input id="couponInput" placeholder="Mã demo: MUC10" autocomplete="off"><button type="submit">Áp dụng</button></form><p id="couponMessage" class="field-message" role="status"></p><div class="summary-line"><span>Tạm tính</span><strong id="cartSubtotal"></strong></div><div class="summary-line"><span>Giảm giá</span><strong id="cartDiscount"></strong></div><div class="summary-line"><span>Vận chuyển</span><strong id="cartShipping"></strong></div><div class="summary-line total"><span>Tổng cộng</span><strong id="cartTotal"></strong></div><button class="primary-button full" id="checkoutButton">Đặt hàng mẫu <span>→</span></button><p class="form-hint">Đây là đơn mô phỏng, không thu tiền hoặc gửi đi.</p></div></dialog>
+  <dialog id="checkoutDialog" class="checkout-dialog" aria-labelledby="checkoutTitle"><button class="close-button" data-close aria-label="Đóng đặt hàng">×</button><div id="checkoutFormView"><p class="eyebrow">HOÀN TẤT BỘ SƯU TẬP</p><h2 id="checkoutTitle">Truyện sắp về kệ.</h2><p class="modal-intro">Thử luồng đặt hàng với thông tin mẫu. Đơn chỉ được lưu trên trình duyệt này.</p><form id="checkoutForm"><label>Người nhận<input name="name" required minlength="2" maxlength="80" autocomplete="name" placeholder="Tên người nhận"></label><label>Số điện thoại<input name="phone" required type="tel" inputmode="tel" autocomplete="tel" pattern="0[0-9]{9}" title="Nhập số điện thoại 10 chữ số, bắt đầu bằng 0" placeholder="0901234567"></label><label>Địa chỉ nhận hàng<textarea name="address" required minlength="10" maxlength="300" rows="2" autocomplete="street-address" placeholder="Số nhà, đường, phường/xã, tỉnh/thành"></textarea></label><div class="payment-note"><span>◉</span><div><strong>Thanh toán khi nhận hàng · COD</strong><small>Chỉ mô phỏng. Không có thanh toán thật.</small></div></div><div class="summary-line total"><span>Tổng đơn mẫu</span><strong id="checkoutTotal"></strong></div><p id="checkoutError" class="field-message" role="alert"></p><button class="primary-button full" type="submit">Xác nhận đơn mẫu <span>→</span></button></form></div><div id="successView" class="success-view" hidden><span class="success-icon">✓</span><p class="eyebrow">ĐÃ LƯU ĐƠN MẪU</p><h2 id="successTitle">Thêm truyện,<br>thêm niềm vui.</h2><p>Đơn <strong id="orderCode"></strong> được lưu trên trình duyệt. Không có đơn hàng thật được gửi đi.</p><div class="summary-line total"><span>Tổng cộng</span><strong id="successTotal"></strong></div><button class="primary-button full" id="continueButton">Tiếp tục khám phá <span>↗</span></button></div></dialog>
+  <dialog id="ordersDialog" class="info-dialog" aria-labelledby="ordersTitle"><button class="close-button" data-close aria-label="Đóng đơn hàng">×</button><p class="eyebrow">TRÊN TRÌNH DUYỆT NÀY</p><h2 id="ordersTitle">Đơn hàng mẫu.</h2><div id="ordersList"></div></dialog>
+  <dialog id="aboutDialog" class="info-dialog" aria-labelledby="aboutTitle"><button class="close-button" data-close aria-label="Đóng thông tin">×</button><p class="eyebrow">XIN CHÀO, NGƯỜI MÊ TRUYỆN</p><h2 id="aboutTitle">Một góc nhỏ tên Mực.</h2><p>Bản frontend cửa hàng truyện in: chọn tập, boxset, yêu thích và thử đặt hàng COD. Giỏ hàng, yêu thích và đơn mẫu được lưu trên trình duyệt.</p><p>Tên truyện đã được tuỳ biến theo yêu cầu. Tác giả và cốt truyện dùng cho bản demo. Bìa tự thiết kế; giá và tồn kho là dữ liệu mẫu. Chưa kết nối thanh toán, vận chuyển hoặc hệ thống bán hàng thật.</p><p>Bố cục tham khảo <a href="https://github.com/AlgoBrother/ComicVerse" target="_blank" rel="noopener noreferrer">ComicVerse ↗</a>; luồng giỏ hàng tham khảo <a href="https://github.com/Mattlambo/comic-e-commerce" target="_blank" rel="noopener noreferrer">Spawn Vault ↗</a>.</p></dialog>
+  <div class="toast" id="toast" popover="manual" role="status" aria-live="polite"></div>
+</body>
+</html>
+
+

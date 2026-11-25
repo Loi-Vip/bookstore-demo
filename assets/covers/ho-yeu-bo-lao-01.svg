@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="600" viewBox="0 0 400 600" role="img" aria-labelledby="title desc">
+<title id="title">Hồ Yêu Bô Lão — Tập 01 — bìa minh hoạ</title><desc id="desc">Tên truyện, tác giả và câu chuyện hư cấu cho cửa hàng demo. Bìa typography và hình học được tạo riêng.</desc>
+<rect width="400" height="600" fill="#ead0d3"/>
+<defs><pattern id="dots" width="8" height="8" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".7" fill="#5d3b4a" opacity=".13"/></pattern></defs>
+<rect width="400" height="600" fill="url(#dots)"/><rect x="22" y="22" width="356" height="556" fill="none" stroke="#5d3b4a" opacity=".45"/>
+<path d="M22 54H378M22 498H378" stroke="#5d3b4a" opacity=".5"/>
+<text x="37" y="43" font-family="Arial,sans-serif" font-size="8" font-weight="700" letter-spacing="2" fill="#5d3b4a">MỰC / NHỮNG THẾ GIỚI MỚI</text>
+<text x="363" y="43" text-anchor="end" font-family="Arial,sans-serif" font-size="8" fill="#5d3b4a">MANHUA</text>
+<text x="37" y="109" font-family="Arial,sans-serif" font-weight="900" font-size="39" letter-spacing="-1.2" fill="#5d3b4a">HỒ YÊU</text>
+<text x="37" y="150" font-family="Arial,sans-serif" font-weight="900" font-size="39" letter-spacing="-1.2" fill="#5d3b4a">BÔ LÃO</text>
+<g transform="translate(200 325)" fill="none" stroke="#5d3b4a" stroke-width="2"><ellipse cx="0" cy="-45" rx="32" ry="57" transform="rotate(0)" fill="#c96f72"/><ellipse cx="0" cy="-45" rx="32" ry="57" transform="rotate(60)" fill="#c96f72"/><ellipse cx="0" cy="-45" rx="32" ry="57" transform="rotate(120)" fill="#c96f72"/><ellipse cx="0" cy="-45" rx="32" ry="57" transform="rotate(180)" fill="#c96f72"/><ellipse cx="0" cy="-45" rx="32" ry="57" transform="rotate(240)" fill="#c96f72"/><ellipse cx="0" cy="-45" rx="32" ry="57" transform="rotate(300)" fill="#c96f72"/><circle r="22" fill="#5d3b4a"/><path d="M-115 112q115-80 230 0"/></g>
+<rect x="270" y="432" width="92" height="66" fill="#5d3b4a"/><text x="316" y="480" text-anchor="middle" font-family="Arial,sans-serif" font-size="49" font-weight="800" letter-spacing="-3" fill="#ead0d3">01</text>
+<text x="37" y="529" font-family="Arial,sans-serif" font-size="13" font-weight="700" fill="#5d3b4a">Thanh Dao</text>
+<text x="37" y="555" font-family="Arial,sans-serif" font-size="8" letter-spacing="1.4" fill="#5d3b4a" opacity=".75">THẾ GIỚI HƯ CẤU / BÌA MINH HOẠ DEMO</text>
+</svg>

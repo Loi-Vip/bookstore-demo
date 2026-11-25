@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="600" viewBox="0 0 400 600" role="img" aria-labelledby="title desc">
+<title id="title">Team Leveldown — Tập 01 — bìa minh hoạ</title><desc id="desc">Tên truyện, tác giả và câu chuyện hư cấu cho cửa hàng demo. Bìa typography và hình học được tạo riêng.</desc>
+<rect width="400" height="600" fill="#222335"/>
+<defs><pattern id="dots" width="8" height="8" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".7" fill="#eee9ff" opacity=".13"/></pattern></defs>
+<rect width="400" height="600" fill="url(#dots)"/><rect x="22" y="22" width="356" height="556" fill="none" stroke="#eee9ff" opacity=".45"/>
+<path d="M22 54H378M22 498H378" stroke="#eee9ff" opacity=".5"/>
+<text x="37" y="43" font-family="Arial,sans-serif" font-size="8" font-weight="700" letter-spacing="2" fill="#eee9ff">MỰC / NHỮNG THẾ GIỚI MỚI</text>
+<text x="363" y="43" text-anchor="end" font-family="Arial,sans-serif" font-size="8" fill="#eee9ff">MANHWA</text>
+<text x="37" y="109" font-family="Arial,sans-serif" font-weight="900" font-size="39" letter-spacing="-1.2" fill="#eee9ff">TEAM</text>
+<text x="37" y="150" font-family="Arial,sans-serif" font-weight="900" font-size="39" letter-spacing="-1.2" fill="#eee9ff">LEVELDOWN</text>
+<g transform="translate(200 325)" fill="none" stroke="#eee9ff" stroke-width="2"><path d="M-90 100V-28a90 90 0 0 1 180 0V100Z" fill="#ad9bea" stroke="none"/><path d="M-65 100V-25a65 65 0 0 1 130 0V100Z" stroke-width="2"/><path d="M-40 100V-20a40 40 0 0 1 80 0V100Z"/><path d="M-12 100V-15a12 12 0 0 1 24 0V100Z"/><path d="M-107 109H107M-110-105H-70M70-105H110"/></g>
+<rect x="270" y="432" width="92" height="66" fill="#eee9ff"/><text x="316" y="480" text-anchor="middle" font-family="Arial,sans-serif" font-size="49" font-weight="800" letter-spacing="-3" fill="#222335">01</text>
+<text x="37" y="529" font-family="Arial,sans-serif" font-size="13" font-weight="700" fill="#eee9ff">Bạch Lam</text>
+<text x="37" y="555" font-family="Arial,sans-serif" font-size="8" letter-spacing="1.4" fill="#eee9ff" opacity=".75">THẾ GIỚI HƯ CẤU / BÌA MINH HOẠ DEMO</text>
+</svg>
