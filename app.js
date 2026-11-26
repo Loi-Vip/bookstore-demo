@@ -11,6 +11,9 @@
   let detailReturnId = '';
   let toastTimer;
   let storageWarned = false;
+  let refreshPromise;
+  let checkoutSubmitting = false;
+  const loginCheckoutUrl = '/auth.html?next=' + encodeURIComponent('/?checkout=1');
 
   function toast(message) {
     $('#toast').textContent = message;
@@ -45,6 +48,68 @@
     $('#wishlistCount').textContent = store.wishlist.length;
     $('#wishlistButton').setAttribute('aria-pressed', String(state.wishlistOnly));
   }
+  function renderAccount() {
+    const user = store.user;
+    $('#accountControls').innerHTML = user
+      ? '<span class="account-name">Xin chào, <strong>' + escape(user.username) + '</strong></span>'
+        + (user.role === 'admin' ? '<a href="/admin" class="account-admin">Quản lý cửa hàng ↗</a>' : '')
+        + '<button type="button" id="logoutButton">Đăng xuất</button>'
+      : '<a href="/auth.html">Đăng nhập</a><a href="/auth.html?mode=register" class="account-register">Đăng ký</a>';
+  }
+  function serviceMessage(message, error = false) {
+    $('#serviceStatus').hidden = !message;
+    $('#serviceStatusText').textContent = message;
+    $('#serviceStatus').classList.toggle('is-error', error);
+    $('#retryConnection').hidden = !error;
+  }
+  function refreshFromServer() {
+    if (store.filePreview) return Promise.resolve();
+    if (refreshPromise) return refreshPromise;
+    refreshPromise = (async () => {
+      try {
+        const [catalog, session] = await Promise.all([
+          window.MUC_API.request('/api/products'), window.MUC_API.request('/api/auth/me')
+        ]);
+        const previousUserId = store.user?.id;
+        store.setUser(session.user);
+        if (previousUserId && previousUserId !== session.user?.id) {
+          $('#checkoutDialog').close();
+          $('#ordersList').textContent = '';
+        }
+        store.replaceProducts(catalog.products);
+        serviceMessage('');
+        renderAccount(); renderCatalog(); renderCart(); renderSeries();
+        if ($('#detailDialog').open) {
+          if (store.byId(detailId)) renderDetail(detailId);
+          else { $('#detailDialog').close(); toast('Sản phẩm này vừa được gỡ khỏi cửa hàng.'); }
+        }
+      } catch (error) {
+        serviceMessage(error.message, true);
+        throw error;
+      } finally { refreshPromise = null; }
+    })();
+    return refreshPromise;
+  }
+  async function beginCheckout() {
+    if (store.filePreview) { toast('Hãy mở website bằng máy chủ để đăng nhập và đặt hàng.'); return; }
+    if (checkoutSubmitting) return;
+    $('#checkoutButton').disabled = true;
+    try {
+      await refreshFromServer();
+      if (!store.cartCount) { toast('Giỏ hàng cần được cập nhật. Hãy chọn sản phẩm còn hàng.'); return; }
+      if (!store.user) {
+        $('#loginCheckout').href = loginCheckoutUrl;
+        $('#registerCheckout').href = loginCheckoutUrl + '&mode=register';
+        showDialog($('#signinDialog'));
+        return;
+      }
+      $('#checkoutFormView').hidden = false; $('#successView').hidden = true;
+      $('#checkoutDialog').setAttribute('aria-labelledby', 'checkoutTitle');
+      $('#checkoutError').textContent = ''; $('#checkoutTotal').textContent = money(store.totals().total);
+      showDialog($('#checkoutDialog'));
+    } catch (error) { toast(error.message); }
+    finally { $('#checkoutButton').disabled = false; }
+  }
   function renderCatalog() {
     const focused = document.activeElement?.dataset.favorite;
     const products = store.query(state);
@@ -52,7 +117,7 @@
     $('#resultCount').textContent = products.length + ' sản phẩm';
     $('#emptyState').hidden = products.length !== 0;
     $('#clearFilters').hidden = !(state.category !== 'all' || state.format || state.search || state.inStock || state.wishlistOnly || state.sort !== 'featured');
-    $('#productGrid').innerHTML = products.map(product => '<article class="product-card" data-product="' + product.id + '"><div class="cover-wrap"><span class="product-badge' + (!product.stock ? ' sold-out' : '') + '">' + escape(!product.stock ? 'Tạm hết hàng' : product.badge) + '</span>' + favoriteButton(product) + '<button class="cover-button" data-detail="' + product.id + '" aria-label="Xem ' + escape(product.title) + '"><img src="' + product.image + '" alt="Bìa minh hoạ ' + escape(product.title) + '" width="280" height="420" loading="lazy"></button></div><div class="product-info"><p class="product-kicker">' + escape(product.categoryLabel) + ' / ' + escape(product.author) + '</p><h3 class="product-title"><button data-detail="' + product.id + '">' + escape(product.series) + '</button></h3><p class="product-volume">' + escape(product.volume) + ' · ' + (product.format === 'boxset' ? 'Boxset / Combo' : 'Bản in tiếng Việt') + '</p>' + priceMarkup(product) + '<button class="add-button" data-add="' + product.id + '"' + (!product.stock ? ' disabled' : '') + '><span class="add-label">' + (product.stock ? 'Thêm vào giỏ' : 'Tạm hết hàng') + '</span><span aria-hidden="true">+</span></button></div></article>').join('');
+    $('#productGrid').innerHTML = products.map(product => '<article class="product-card" data-product="' + product.id + '"><div class="cover-wrap"><span class="product-badge' + (!product.stock ? ' sold-out' : '') + '">' + escape(!product.stock ? 'Tạm hết hàng' : product.badge) + '</span>' + favoriteButton(product) + '<button class="cover-button" data-detail="' + product.id + '" aria-label="Xem ' + escape(product.title) + '"><img src="' + escape(product.image) + '" alt="Bìa minh hoạ ' + escape(product.title) + '" width="280" height="420" loading="lazy"></button></div><div class="product-info"><p class="product-kicker">' + escape(product.categoryLabel) + ' / ' + escape(product.author) + '</p><h3 class="product-title"><button data-detail="' + product.id + '">' + escape(product.series) + '</button></h3><p class="product-volume">' + escape(product.volume) + ' · ' + (product.format === 'boxset' ? 'Boxset / Combo' : 'Bản in tiếng Việt') + '</p>' + priceMarkup(product) + '<button class="add-button" data-add="' + product.id + '"' + (!product.stock ? ' disabled' : '') + '><span class="add-label">' + (product.stock ? 'Thêm vào giỏ' : 'Tạm hết hàng') + '</span><span aria-hidden="true">+</span></button></div></article>').join('');
     $$('.category[data-category]').forEach(button => {
       const selected = state.category === button.dataset.category;
       button.classList.toggle('active', selected); button.setAttribute('aria-pressed', String(selected));
@@ -80,7 +145,7 @@
     detailId = id;
     const siblings = store.products.filter(item => item.series === product.series);
     $('#detailDialog').setAttribute('aria-labelledby', 'detailTitle');
-    $('#detailContent').innerHTML = '<div class="detail-layout"><div class="detail-cover"><img src="' + product.image + '" alt="Bìa minh hoạ ' + escape(product.title) + '" width="280" height="420"></div><div class="detail-info"><p class="eyebrow">' + escape(product.categoryLabel) + ' / ' + (product.format === 'boxset' ? 'BOXSET' : 'TRUYỆN IN') + '</p><h2 id="detailTitle">' + escape(product.series) + '</h2><p class="detail-author">' + escape(product.author) + '</p>' + priceMarkup(product) + '<p class="detail-description">' + escape(product.description) + '</p><dl class="detail-meta"><div><dt>Phiên bản</dt><dd>' + escape(product.volume) + '</dd></div><div><dt>Bộ truyện</dt><dd>' + escape(product.seriesStatus) + '</dd></div><div><dt>Loại sản phẩm</dt><dd>' + (product.format === 'boxset' ? 'Boxset / Combo' : 'Tập lẻ') + '</dd></div><div><dt>Tồn kho mẫu</dt><dd>' + product.stock + ' sản phẩm</dd></div></dl><p class="volume-label">Chọn tập / phiên bản</p><div class="volume-options">' + siblings.map(item => '<button data-volume="' + item.id + '" class="' + (item.id === id ? 'active' : '') + '" aria-pressed="' + (item.id === id) + '">' + escape(item.volume) + (!item.stock ? ' · Hết' : '') + '</button>').join('') + '</div><div class="detail-actions"><button class="primary-button" data-add="' + id + '"' + (!product.stock ? ' disabled' : '') + '>' + (product.stock ? 'Thêm vào giỏ' : 'Tạm hết hàng') + ' <span>+</span></button>' + favoriteButton(product) + '</div><p class="stock-status">' + (product.stock ? '● Còn hàng mẫu · Chọn đúng tập bạn đang tìm.' : '○ Tạm hết tập này. Bạn có thể chọn tập khác.') + '</p></div></div>';
+    $('#detailContent').innerHTML = '<div class="detail-layout"><div class="detail-cover"><img src="' + escape(product.image) + '" alt="Bìa minh hoạ ' + escape(product.title) + '" width="280" height="420"></div><div class="detail-info"><p class="eyebrow">' + escape(product.categoryLabel) + ' / ' + (product.format === 'boxset' ? 'BOXSET' : 'TRUYỆN IN') + '</p><h2 id="detailTitle">' + escape(product.series) + '</h2><p class="detail-author">' + escape(product.author) + '</p>' + priceMarkup(product) + '<p class="detail-description">' + escape(product.description) + '</p><dl class="detail-meta"><div><dt>Phiên bản</dt><dd>' + escape(product.volume) + '</dd></div><div><dt>Bộ truyện</dt><dd>' + escape(product.seriesStatus) + '</dd></div><div><dt>Loại sản phẩm</dt><dd>' + (product.format === 'boxset' ? 'Boxset / Combo' : 'Tập lẻ') + '</dd></div><div><dt>Tồn kho</dt><dd>' + product.stock + ' sản phẩm</dd></div></dl><p class="volume-label">Chọn tập / phiên bản</p><div class="volume-options">' + siblings.map(item => '<button data-volume="' + item.id + '" class="' + (item.id === id ? 'active' : '') + '" aria-pressed="' + (item.id === id) + '">' + escape(item.volume) + (!item.stock ? ' · Hết' : '') + '</button>').join('') + '</div><div class="detail-actions"><button class="primary-button" data-add="' + id + '"' + (!product.stock ? ' disabled' : '') + '>' + (product.stock ? 'Thêm vào giỏ' : 'Tạm hết hàng') + ' <span>+</span></button>' + favoriteButton(product) + '</div><p class="stock-status">' + (product.stock ? '● Còn hàng · Chọn đúng tập bạn đang tìm.' : '○ Tạm hết tập này. Bạn có thể chọn tập khác.') + '</p></div></div>';
   }
   function openDetail(id) {
     if (!store.byId(id)) return;
@@ -97,7 +162,7 @@
     $('#cartEmpty').hidden = lines.length > 0;
     $('#cartItems').hidden = lines.length === 0;
     $('#cartFooter').hidden = lines.length === 0;
-    $('#cartItems').innerHTML = lines.map(item => '<div class="cart-row" data-cart-id="' + item.id + '"><img src="' + item.product.image + '" alt="" width="58" height="87"><div><h3>' + escape(item.product.series) + '</h3><p>' + escape(item.product.volume) + ' · ' + money(item.product.price) + '</p><div class="qty-control"><button data-quantity="' + item.id + '" data-delta="-1" aria-label="Giảm số lượng ' + escape(item.product.title) + '">−</button><span aria-label="Số lượng">' + item.quantity + '</span><button data-quantity="' + item.id + '" data-delta="1" aria-label="Tăng số lượng ' + escape(item.product.title) + '"' + (item.quantity >= item.product.stock ? ' disabled' : '') + '>+</button></div></div><div class="cart-row-end"><strong>' + money(item.product.price * item.quantity) + '</strong><button class="remove-item" data-remove="' + item.id + '" aria-label="Xoá ' + escape(item.product.title) + ' khỏi giỏ">Xoá</button></div></div>').join('');
+    $('#cartItems').innerHTML = lines.map(item => '<div class="cart-row" data-cart-id="' + item.id + '"><img src="' + escape(item.product.image) + '" alt="" width="58" height="87"><div><h3>' + escape(item.product.series) + '</h3><p>' + escape(item.product.volume) + ' · ' + money(item.product.price) + '</p><div class="qty-control"><button data-quantity="' + item.id + '" data-delta="-1" aria-label="Giảm số lượng ' + escape(item.product.title) + '">−</button><span aria-label="Số lượng">' + item.quantity + '</span><button data-quantity="' + item.id + '" data-delta="1" aria-label="Tăng số lượng ' + escape(item.product.title) + '"' + (item.quantity >= item.product.stock ? ' disabled' : '') + '>+</button></div></div><div class="cart-row-end"><strong>' + money(item.product.price * item.quantity) + '</strong><button class="remove-item" data-remove="' + item.id + '" aria-label="Xoá ' + escape(item.product.title) + ' khỏi giỏ">Xoá</button></div></div>').join('');
     $('#cartSubtotal').textContent = money(total.subtotal);
     $('#cartDiscount').textContent = total.discount ? '−' + money(total.discount) : money(0);
     $('#cartShipping').textContent = total.shipping ? money(total.shipping) : 'Miễn phí';
@@ -115,14 +180,28 @@
     $('#seriesGrid').innerHTML = names.map(name => {
       const products = store.products.filter(product => product.series === name);
       if (!products.length) return '';
-      return '<button class="series-card" data-series="' + escape(name) + '"><img src="' + products[0].image + '" alt="" width="65" height="98" loading="lazy"><div><h3>' + escape(name) + '</h3><p>' + escape(products[0].categoryLabel) + ' · ' + products.length + ' phiên bản mẫu</p><small>Xem các tập trong bộ</small></div><span class="series-arrow">↗</span></button>';
+      return '<button class="series-card" data-series="' + escape(name) + '"><img src="' + escape(products[0].image) + '" alt="" width="65" height="98" loading="lazy"><div><h3>' + escape(name) + '</h3><p>' + escape(products[0].categoryLabel) + ' · ' + products.length + ' phiên bản</p><small>Xem các tập trong bộ</small></div><span class="series-arrow">↗</span></button>';
     }).join('');
     const heroProducts = [store.byId('two-piece-01'), store.products.find(product => product.category === 'manhwa'), store.byId('chu-thuat-hoi-man-01')].filter(Boolean);
-    $('#heroCovers').innerHTML = heroProducts.map(product => '<img src="' + product.image + '" width="280" height="420" alt="Bìa minh hoạ ' + escape(product.series) + '">').join('');
+    $('#heroCovers').innerHTML = heroProducts.map(product => '<img src="' + escape(product.image) + '" width="280" height="420" alt="Bìa minh hoạ ' + escape(product.series) + '">').join('');
   }
   function renderOrders() {
     const orders = store.orders;
-    $('#ordersList').innerHTML = orders.length ? orders.map(order => '<article class="order-card"><div class="order-card-head"><strong>' + escape(order.code) + '</strong><span>Đơn mô phỏng</span></div><p>' + new Date(order.createdAt).toLocaleString('vi-VN', { timeZone: 'Asia/Bangkok' }) + '</p><ul>' + order.items.map(item => '<li>' + escape(item.title) + ' × ' + item.quantity + '</li>').join('') + '</ul><strong>Tổng: ' + money(order.totals.total) + '</strong></article>').join('') : '<div class="empty-state"><h3>Chưa có đơn hàng mẫu.</h3><p>Chọn vài tập truyện rồi thử đặt hàng nhé.</p></div>';
+    const statuses = { pending: 'Chờ xử lý', completed: 'Đã hoàn tất', cancelled: 'Đã hủy' };
+    $('#ordersList').innerHTML = orders.length ? orders.map(order => '<article class="order-card"><div class="order-card-head"><strong>' + escape(order.code) + '</strong><span class="order-status order-status-' + escape(order.status) + '">' + escape(statuses[order.status] || order.status) + '</span></div><p>' + new Date(order.createdAt).toLocaleString('vi-VN', { timeZone: 'Asia/Bangkok' }) + '</p><ul>' + order.items.map(item => '<li>' + escape(item.title) + ' × ' + item.quantity + '</li>').join('') + '</ul><strong>Tổng cộng ' + money(order.totals.total) + '</strong></article>').join('') : '<div class="empty-state"><h3>Bạn chưa có đơn hàng.</h3><p>Chọn vài tập truyện để bắt đầu bộ sưu tập nhé.</p></div>';
+  }
+  async function openOrders() {
+    showDialog($('#ordersDialog'));
+    $('#ordersList').textContent = 'Đang tải đơn hàng…';
+    try {
+      await refreshFromServer();
+      if (!store.user) {
+        $('#ordersList').innerHTML = '<p>Đăng nhập để xem đơn hàng của bạn.</p><a class="primary-button" href="/auth.html">Đăng nhập</a>';
+        return;
+      }
+      await store.loadOrders();
+      renderOrders();
+    } catch (error) { $('#ordersList').textContent = error.message; }
   }
   function setTheme(theme) {
     document.documentElement.dataset.theme = theme;
@@ -153,7 +232,7 @@
       toast(added ? 'Đã lưu tập truyện vào danh sách yêu thích.' : 'Đã bỏ khỏi danh sách yêu thích.'); reportStorage(); return;
     }
     if (button.dataset.quantity) {
-      if (!store.change(button.dataset.quantity, Number(button.dataset.delta))) toast('Không thể tăng quá tồn kho mẫu.');
+      if (!store.change(button.dataset.quantity, Number(button.dataset.delta))) toast('Không thể tăng quá tồn kho.');
       renderCart(); reportStorage(); return;
     }
     if (button.dataset.remove) {
@@ -165,7 +244,16 @@
     if (button.dataset.nav) { resetFilters({ category: button.dataset.nav }); scrollCatalog(); return; }
     if (button.dataset.formatNav) { resetFilters({ format: 'boxset' }); scrollCatalog(); return; }
     if (button.dataset.series) { resetFilters({ search: button.dataset.series }); scrollCatalog(); return; }
-    if (button.hasAttribute('data-orders')) { renderOrders(); showDialog($('#ordersDialog')); }
+    if (button.hasAttribute('data-orders')) { void openOrders(); }
+    if (button.id === 'logoutButton') {
+      button.disabled = true;
+      window.MUC_API.request('/api/auth/logout', { method: 'POST' }).then(() => {
+        store.setUser(null); renderAccount();
+        $('#checkoutDialog').close(); $('#ordersDialog').close();
+        $('#ordersList').textContent = '';
+        toast('Đã đăng xuất. Giỏ hàng vẫn được giữ trên trình duyệt này.');
+      }).catch(error => { button.disabled = false; toast(error.message); });
+    }
   });
   $('#searchForm').addEventListener('submit', event => { event.preventDefault(); state.search = $('#searchInput').value; renderCatalog(); scrollCatalog(); });
   $('#searchInput').addEventListener('input', () => { state.search = $('#searchInput').value; renderCatalog(); });
@@ -177,31 +265,47 @@
   $('#wishlistButton').addEventListener('click', () => { const selected = !state.wishlistOnly; resetFilters({ wishlistOnly: selected }); scrollCatalog(); });
   $('#themeToggle').addEventListener('click', () => { const theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; setTheme(theme); store.setTheme(theme); });
   $('#openCart').addEventListener('click', () => { renderCart(); showDialog($('#cartDialog')); });
-  $('#checkoutButton').addEventListener('click', () => {
-    if (!store.cartCount) return;
-    $('#checkoutFormView').hidden = false; $('#successView').hidden = true;
-    $('#checkoutDialog').setAttribute('aria-labelledby', 'checkoutTitle');
-    $('#checkoutError').textContent = ''; $('#checkoutTotal').textContent = money(store.totals().total);
-    showDialog($('#checkoutDialog'));
-  });
+  $('#checkoutButton').addEventListener('click', () => { void beginCheckout(); });
   $('#couponForm').addEventListener('submit', event => {
     event.preventDefault(); const result = store.applyCoupon($('#couponInput').value); $('#couponMessage').textContent = result.message; renderCart();
   });
-  $('#checkoutForm').addEventListener('submit', event => {
+  $('#checkoutForm').addEventListener('submit', async event => {
     event.preventDefault();
-    if (!event.target.reportValidity()) return;
-    const data = Object.fromEntries(new FormData(event.target));
+    const form = event.target;
+    if (checkoutSubmitting || !form.reportValidity()) return;
+    const data = Object.fromEntries(new FormData(form));
+    const submit = form.querySelector('[type="submit"]');
+    checkoutSubmitting = true;
+    submit.disabled = true;
+    $('#checkoutError').textContent = 'Đang xác nhận đơn hàng…';
     try {
-      const order = store.checkout(data);
+      const previousCart = JSON.stringify({ lines: store.cartLines().map(item => [item.id, item.quantity, item.product.price]), coupon: store.coupon });
+      const retryingOrder = store.hasPendingCheckout;
+      await refreshFromServer();
+      if (!store.user) {
+        $('#checkoutError').innerHTML = 'Phiên đăng nhập đã hết hạn. <a href="' + loginCheckoutUrl + '">Đăng nhập lại</a> để tiếp tục.';
+        return;
+      }
+      const refreshedCart = JSON.stringify({ lines: store.cartLines().map(item => [item.id, item.quantity, item.product.price]), coupon: store.coupon });
+      if (!retryingOrder && previousCart !== refreshedCart) {
+        $('#checkoutError').textContent = 'Giá hoặc số lượng vừa được cập nhật. Vui lòng kiểm tra tổng tiền rồi xác nhận lại.';
+        return;
+      }
+      const order = await store.checkout(data);
       $('#orderCode').textContent = order.code;
       $('#successTotal').textContent = money(order.totals.total);
       $('#checkoutFormView').hidden = true; $('#successView').hidden = false;
       $('#checkoutDialog').setAttribute('aria-labelledby', 'successTitle');
-      event.target.reset(); renderCart(); $('#continueButton').focus(); $('#checkoutDialog').scrollTop = 0;
-    } catch (error) { $('#checkoutError').textContent = error.message; }
+      form.reset(); renderCatalog(); renderCart(); renderSeries();
+      $('#continueButton').focus(); $('#checkoutDialog').scrollTop = 0;
+    } catch (error) {
+      $('#checkoutError').textContent = error.message;
+      if (error.status === 401) { store.setUser(null); renderAccount(); }
+    } finally { checkoutSubmitting = false; submit.disabled = false; }
   });
   $('#continueButton').addEventListener('click', () => { $('#checkoutDialog').close(); scrollCatalog(); });
-  $('#openOrders').addEventListener('click', () => { renderOrders(); showDialog($('#ordersDialog')); });
+  $('#openOrders').addEventListener('click', () => { void openOrders(); });
+  $('#retryConnection').addEventListener('click', () => { void refreshFromServer().catch(() => {}); });
   $('#aboutButton').addEventListener('click', () => showDialog($('#aboutDialog')));
   $$('dialog').forEach(dialog => dialog.addEventListener('click', event => {
     const bounds = dialog.getBoundingClientRect();
@@ -219,13 +323,30 @@
   window.addEventListener('storage', event => {
     if (event.key !== null && !event.key.startsWith('muc-comics-')) return;
     store.sync(); renderCatalog(); renderCart();
-    if ($('#ordersDialog').open) renderOrders();
     if ($('#detailDialog').open) renderDetail(detailId);
     if ($('#checkoutDialog').open && !$('#checkoutFormView').hidden) $('#checkoutError').textContent = 'Giỏ truyện vừa thay đổi ở tab khác. Vui lòng kiểm tra lại tổng đơn.';
     setTheme(store.theme);
   });
-  setTheme(store.theme); renderCatalog(); renderCart(); renderSeries();
-  const incomingId = new URL(location.href).searchParams.get('truyen');
-  const initialId = store.byId(incomingId)?.id;
-  if (initialId && store.byId(initialId)) openDetail(initialId);
+  window.addEventListener('focus', () => { if (!checkoutSubmitting) void refreshFromServer().catch(() => {}); });
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden && !checkoutSubmitting) void refreshFromServer().catch(() => {});
+  });
+  async function initialize() {
+    setTheme(store.theme); renderAccount(); renderCart();
+    if (store.filePreview) {
+      renderCatalog(); renderSeries();
+      serviceMessage('Đang xem bản tĩnh. Hãy chạy máy chủ để dùng đăng ký, đăng nhập và đặt hàng.');
+    } else {
+      serviceMessage('Đang tải cửa hàng…');
+      try { await refreshFromServer(); } catch { return; }
+    }
+    const url = new URL(location.href);
+    const initialId = store.byId(url.searchParams.get('truyen'))?.id;
+    if (initialId) openDetail(initialId);
+    if (url.searchParams.get('checkout') === '1') {
+      url.searchParams.delete('checkout'); history.replaceState(null, '', url);
+      await beginCheckout();
+    }
+  }
+  void initialize();
 })();

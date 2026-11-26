@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f6f2">
+  <title>Đăng nhập và đăng ký — Mực</title>
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/account.css">
+  <script src="/api.js" defer></script>
+  <script src="/auth.js" defer></script>
+</head>
+<body class="auth-page">
+  <a class="skip-link" href="#authForm">Đến biểu mẫu tài khoản</a>
+  <header class="account-header">
+    <a class="account-brand" href="/" aria-label="Mực — trang chủ">MỰC<span aria-hidden="true">✳</span><small>COMIC STORE</small></a>
+    <a class="text-link" href="/">Về cửa hàng <span aria-hidden="true">↗</span></a>
+  </header>
+  <main class="auth-layout">
+    <section class="auth-story" aria-labelledby="storyTitle">
+      <p class="eyebrow">DÀNH CHO NGƯỜI MÊ TRUYỆN</p>
+      <h1 id="storyTitle">Một tài khoản.<br>Cả thế giới <em>truyện.</em></h1>
+      <p>Đăng nhập để đặt truyện và theo dõi những đơn hàng dành cho bộ sưu tập của bạn.</p>
+      <div class="auth-covers" aria-hidden="true">
+        <img src="/assets/covers/chu-thuat-hoi-man-01.svg" alt="" width="170" height="255">
+        <img src="/assets/covers/two-piece-01.svg" alt="" width="170" height="255">
+        <img src="/assets/covers/gia-dinh-va-con-cho-01.svg" alt="" width="170" height="255">
+      </div>
+      <span class="story-foot">THÊM MỘT TẬP, THÊM MỘT CUỘC PHIÊU LƯU.</span>
+    </section>
+    <section class="auth-panel" aria-labelledby="authTitle">
+      <div class="auth-tabs" role="tablist" aria-label="Chọn đăng nhập hoặc đăng ký">
+        <button type="button" id="loginTab" role="tab" aria-selected="true" aria-controls="authContent" tabindex="0">Đăng nhập</button>
+        <button type="button" id="registerTab" role="tab" aria-selected="false" aria-controls="authContent" tabindex="-1">Đăng ký</button>
+      </div>
+      <div id="authContent" role="tabpanel" aria-labelledby="loginTab">
+        <p class="eyebrow" id="authEyebrow">CHÀO MỪNG TRỞ LẠI</p>
+        <h2 id="authTitle">Kệ truyện đang đợi bạn.</h2>
+        <p class="muted" id="authIntro">Đăng nhập bằng tài khoản Mực của bạn.</p>
+        <form id="authForm">
+          <label for="username">Tên đăng nhập</label>
+          <input id="username" name="username" type="text" required minlength="3" maxlength="32" autocomplete="username" autocapitalize="none" spellcheck="false" aria-describedby="usernameHint">
+          <p class="input-hint" id="usernameHint">Từ 3 đến 32 ký tự, gồm chữ, số, dấu chấm, gạch ngang hoặc gạch dưới.</p>
+          <label for="password">Mật khẩu</label>
+          <div class="password-field"><input id="password" name="password" type="password" required autocomplete="current-password" maxlength="256" aria-describedby="passwordHint"><button type="button" id="passwordToggle" aria-label="Hiện mật khẩu" aria-pressed="false">Hiện</button></div>
+          <p class="input-hint" id="passwordHint">Nhập mật khẩu tài khoản của bạn.</p>
+          <div id="confirmationField" hidden>
+            <label for="passwordConfirmation">Nhập lại mật khẩu</label>
+            <input id="passwordConfirmation" name="passwordConfirmation" type="password" autocomplete="new-password" minlength="8" maxlength="256">
+          </div>
+          <p id="authError" class="form-message error-message" role="alert"></p>
+          <button type="submit" id="authSubmit" class="primary-button full">Đăng nhập <span aria-hidden="true">→</span></button>
+          <p id="authStatus" class="form-message" role="status" aria-live="polite"></p>
+        </form>
+        <p class="auth-switch" id="authSwitch">Bạn mới đến Mực? <button type="button" id="switchMode">Tạo tài khoản</button></p>
+      </div>
+    </section>
+  </main>
+  <footer class="account-footer">© 2026 Mực Comic Store</footer>
+</body>
+</html>

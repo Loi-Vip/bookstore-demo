@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f6f2">
+  <title>Đăng nhập quản trị — Mực</title>
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/account.css">
+  <script src="/api.js" defer></script>
+  <script src="/admin/login.js" defer></script>
+</head>
+<body class="admin-login-page">
+  <a class="skip-link" href="#adminLoginForm">Đến biểu mẫu đăng nhập quản trị</a>
+  <header class="account-header">
+    <a class="account-brand" href="/" aria-label="Mực — trang chủ">MỰC<span aria-hidden="true">✳</span><small>COMIC STORE</small></a>
+    <a class="text-link" href="/">Về cửa hàng <span aria-hidden="true">↗</span></a>
+  </header>
+  <main class="admin-login-layout">
+    <section class="admin-login-panel" aria-labelledby="adminLoginTitle">
+      <h1 id="adminLoginTitle">Đăng nhập quản trị</h1>
+      <p class="muted">Quản lý sản phẩm, đơn hàng và doanh thu của cửa hàng.</p>
+      <form id="adminLoginForm">
+        <label for="username">Tên đăng nhập quản trị</label>
+        <input id="username" name="username" type="text" required minlength="3" maxlength="32" autocomplete="username" autocapitalize="none" spellcheck="false">
+        <label for="password">Mật khẩu</label>
+        <div class="password-field">
+          <input id="password" name="password" type="password" required maxlength="256" autocomplete="current-password">
+          <button type="button" id="passwordToggle" aria-label="Hiện mật khẩu" aria-pressed="false">Hiện</button>
+        </div>
+        <p id="authError" class="form-message error-message" role="alert" hidden></p>
+        <button type="submit" id="authSubmit" class="primary-button full">Đăng nhập quản trị <span aria-hidden="true">→</span></button>
+        <p id="authStatus" class="form-message" role="status" aria-live="polite" hidden></p>
+      </form>
+    </section>
+  </main>
+  <footer class="account-footer">© 2026 Mực Comic Store</footer>
+</body>
+</html>
